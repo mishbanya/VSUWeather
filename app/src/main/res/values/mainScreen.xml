@@ -1,3 +1,4 @@
 <resources>
     <string name="add_city">Adding city</string>
+    <string name="remove_city">Remove city?</string>
 </resources>

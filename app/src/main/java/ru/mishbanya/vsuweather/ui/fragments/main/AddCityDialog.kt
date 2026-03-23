@@ -1,4 +1,4 @@
-package ru.mishbanya.vsuweather.ui.screens.main
+package ru.mishbanya.vsuweather.ui.fragments.main
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row

@@ -1,34 +1,38 @@
 package ru.mishbanya.vsuweather
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import ru.mishbanya.vsuweather.domain.vm.MainScreenViewModelImpl
-import ru.mishbanya.vsuweather.ui.screens.main.MainScreen
-import ru.mishbanya.vsuweather.ui.theme.VSUWeatherTheme
+import androidx.fragment.app.FragmentActivity
+import kotlinx.serialization.json.Json
+import ru.mishbanya.vsuweather.ui.fragments.city.CityScreenFragment
+import ru.mishbanya.vsuweather.ui.fragments.main.MainScreenFragment
+import ru.mishbanya.vsuweather.ui.nav.ScreenConfig
 
-class MainActivity : ComponentActivity() {
-
-    val mainScreenViewModel = MainScreenViewModelImpl()
+class MainActivity : FragmentActivity() {
+    private var screenConfig: ScreenConfig = ScreenConfig.MainScreenConfig
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContent {
-            VSUWeatherTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    MainScreen(
-                        mainScreenViewModel = mainScreenViewModel
-                    )
-                }
+        setContentView(R.layout.activity_main)
+        navigateTo(screenConfig)
+    }
+
+
+    fun navigateTo(screenConfig: ScreenConfig){
+        this.screenConfig = screenConfig
+        when(screenConfig){
+            is ScreenConfig.MainScreenConfig -> {
+                supportFragmentManager.popBackStack(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, MainScreenFragment())
+                    .commit()
+            }
+            is ScreenConfig.CityScreenConfig -> {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, CityScreenFragment.newInstance(screenConfig.cityWeather.id))
+                    .addToBackStack(null)
+                    .commit()
             }
         }
     }
