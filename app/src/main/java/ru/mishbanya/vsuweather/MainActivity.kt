@@ -11,16 +11,23 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import ru.mishbanya.vsuweather.domain.vm.MainScreenViewModelImpl
+import ru.mishbanya.vsuweather.ui.screens.main.MainScreen
 import ru.mishbanya.vsuweather.ui.theme.VSUWeatherTheme
 
 class MainActivity : ComponentActivity() {
+
+    val mainScreenViewModel = MainScreenViewModelImpl()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             VSUWeatherTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    MainScreen()
+                    MainScreen(
+                        mainScreenViewModel = mainScreenViewModel
+                    )
                 }
             }
         }
