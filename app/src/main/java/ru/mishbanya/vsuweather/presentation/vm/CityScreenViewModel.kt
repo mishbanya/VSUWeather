@@ -1,0 +1,50 @@
+package ru.mishbanya.vsuweather.presentation.vm
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import ru.mishbanya.vsuweather.presentation.vm.dto.CityForecastModel
+import org.koin.android.annotation.KoinViewModel
+import ru.mishbanya.vsuweather.data.retrofit.weather.RetrofitWeatherRepository
+import ru.mishbanya.vsuweather.presentation.vm.dto.mappers.toCityForecastModel
+
+@KoinViewModel
+class CityScreenViewModel(
+    private val retrofitWeatherRepository: RetrofitWeatherRepository
+): ViewModel() {
+    private val cityWeatherID = MutableStateFlow("")
+
+    val cityForecastModel: StateFlow<CityForecastModel?> = combine(
+        retrofitWeatherRepository.cities,
+        cityWeatherID
+    ) { cities, id ->
+        cities.firstOrNull {
+            it.id == id
+        }?.toCityForecastModel()
+    }.stateIn(
+        viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = null
+    )
+
+    val isLoading = retrofitWeatherRepository.isLoading
+    val isError = retrofitWeatherRepository.isError
+
+    fun setCity(id: String) {
+        cityWeatherID.value = id
+        viewModelScope.launch {
+            retrofitWeatherRepository.updateWeather()
+        }
+    }
+
+    fun updateWeather() {
+        viewModelScope.launch {
+            retrofitWeatherRepository.updateWeather()
+        }
+    }
+}

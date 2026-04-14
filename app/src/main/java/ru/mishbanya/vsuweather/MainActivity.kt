@@ -3,10 +3,9 @@ package ru.mishbanya.vsuweather
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.fragment.app.FragmentActivity
-import kotlinx.serialization.json.Json
-import ru.mishbanya.vsuweather.ui.fragments.city.CityScreenFragment
-import ru.mishbanya.vsuweather.ui.fragments.main.MainScreenFragment
-import ru.mishbanya.vsuweather.ui.nav.ScreenConfig
+import ru.mishbanya.vsuweather.presentation.view.screens.city.CityScreenFragment
+import ru.mishbanya.vsuweather.presentation.view.screens.main.MainScreenFragment
+import ru.mishbanya.vsuweather.presentation.view.nav.ScreenConfig
 
 class MainActivity : FragmentActivity() {
     private var screenConfig: ScreenConfig = ScreenConfig.MainScreenConfig
@@ -30,7 +29,7 @@ class MainActivity : FragmentActivity() {
             }
             is ScreenConfig.CityScreenConfig -> {
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, CityScreenFragment.newInstance(screenConfig.cityWeather.id))
+                    .replace(R.id.fragment_container, CityScreenFragment.newInstance(screenConfig.cityID))
                     .addToBackStack(null)
                     .commit()
             }

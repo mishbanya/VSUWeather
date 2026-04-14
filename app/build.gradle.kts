@@ -6,6 +6,10 @@ plugins {
     kotlin("plugin.serialization") version "2.0.21"
 }
 
+ksp {
+    arg("KOIN_DEFAULT_MODULE","true")
+}
+
 android {
     namespace = "ru.mishbanya.vsuweather"
     compileSdk {
@@ -62,13 +66,14 @@ dependencies {
 
     implementation(libs.koin.core)
     implementation(libs.koin.compose)
-    implementation(libs.koin.bom)
+    implementation(platform(libs.koin.bom))
     implementation(libs.koin.annotations)
     implementation(libs.koin.viewmodel)
     ksp(libs.koin.ksp.compiler)
 
     implementation(libs.retrofit.core)
-    implementation(libs.retrofit.converter.gson)
+    implementation("com.squareup.retrofit2:converter-kotlinx-serialization:2.11.0")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
