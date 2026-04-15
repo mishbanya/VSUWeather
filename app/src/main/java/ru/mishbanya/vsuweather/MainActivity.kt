@@ -5,7 +5,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.fragment.app.FragmentActivity
 import ru.mishbanya.vsuweather.presentation.view.screens.city.CityScreenFragment
 import ru.mishbanya.vsuweather.presentation.view.screens.main.MainScreenFragment
-import ru.mishbanya.vsuweather.presentation.view.nav.ScreenConfig
+import ru.mishbanya.vsuweather.presentation.nav.ScreenConfig
 
 class MainActivity : FragmentActivity() {
     private var screenConfig: ScreenConfig = ScreenConfig.MainScreenConfig

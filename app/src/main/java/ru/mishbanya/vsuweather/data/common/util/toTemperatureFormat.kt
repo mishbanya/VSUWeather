@@ -1,4 +1,4 @@
-package ru.mishbanya.vsuweather.presentation.vm.dto.ext
+package ru.mishbanya.vsuweather.data.common.util
 
 import kotlin.math.abs
 

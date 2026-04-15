@@ -1,0 +1,4 @@
+<resources>
+    <string name="sort_by_date">По дате</string>
+    <string name="sort_by_temp">По температуре</string>
+</resources>

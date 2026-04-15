@@ -1,4 +1,4 @@
-package ru.mishbanya.vsuweather.presentation.view.nav
+package ru.mishbanya.vsuweather.presentation.nav
 
 import kotlinx.serialization.Serializable
 import ru.mishbanya.vsuweather.presentation.vm.dto.CityForecastModel

@@ -31,7 +31,7 @@ class CommonModule {
         AppDatabase::class.java,
         "vsu_weather_database"
     ).build()
-    
+
     @Single
     fun provideSharedPreferences(
         context: Context

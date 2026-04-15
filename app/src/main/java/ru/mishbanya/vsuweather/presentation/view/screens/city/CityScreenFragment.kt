@@ -14,7 +14,7 @@ import androidx.fragment.app.Fragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.mishbanya.vsuweather.MainActivity
 import ru.mishbanya.vsuweather.presentation.vm.CityScreenViewModel
-import ru.mishbanya.vsuweather.presentation.view.nav.ScreenConfig
+import ru.mishbanya.vsuweather.presentation.nav.ScreenConfig
 import ru.mishbanya.vsuweather.presentation.view.theme.VSUWeatherTheme
 
 class CityScreenFragment : Fragment() {

@@ -11,12 +11,15 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.koin.core.annotation.Single
 import retrofit2.Retrofit
+import ru.mishbanya.vsuweather.data.database.weather.LocalWeatherRepository
 import ru.mishbanya.vsuweather.data.retrofit.weather.api.WeatherApi
 import ru.mishbanya.vsuweather.data.retrofit.weather.dto.RetrofitCityModel
+import ru.mishbanya.vsuweather.data.retrofit.weather.dto.mappers.toWeatherEntity
 
 @Single(binds = [RetrofitWeatherRepository::class])
 class RetrofitWeatherRepositoryImpl(
-    private val retrofit: Retrofit
+    private val retrofit: Retrofit,
+    private val localWeatherRepository: LocalWeatherRepository
 ): RetrofitWeatherRepository {
     private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
@@ -47,6 +50,7 @@ class RetrofitWeatherRepositoryImpl(
         _isLoading.emit(true)
         try {
             val response = api.getWeather()
+            localWeatherRepository.saveWeather(response.cities.map { it.toWeatherEntity() })
             _cities.emit(response.cities)
             _isError.emit(false)
         } catch (e: Exception) {
