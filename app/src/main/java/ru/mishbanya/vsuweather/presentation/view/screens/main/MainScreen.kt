@@ -6,10 +6,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -20,12 +22,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ru.mishbanya.vsuweather.R
-import ru.mishbanya.vsuweather.presentation.view.common.LoadingWIthErrorsScreen
+import ru.mishbanya.vsuweather.presentation.view.common.ScreenWithLoading
 import ru.mishbanya.vsuweather.presentation.vm.MainScreenViewModel
 import ru.mishbanya.vsuweather.presentation.nav.ScreenConfig
+import ru.mishbanya.vsuweather.presentation.view.common.UpdateButtonWithIndicators
 
 @Composable
 fun MainScreen(
@@ -35,16 +39,15 @@ fun MainScreen(
 ) {
     val cities by mainScreenViewModel.cities.collectAsState()
 
-    val isError by mainScreenViewModel.isError.collectAsState()
-    val isLoading by mainScreenViewModel.isLoading.collectAsState()
+    val isError by mainScreenViewModel.isServerError.collectAsState()
+    val isLoading by mainScreenViewModel.isLoadingFromServer.collectAsState()
 
     var searchQuery by remember { mutableStateOf("") }
 
     Column(
         modifier = modifier.fillMaxSize().padding(vertical = 48.dp)
     ) {
-        LoadingWIthErrorsScreen(
-            isError = isError,
+        ScreenWithLoading(
             isLoading = isLoading,
             content = {
                 TextField(
@@ -52,7 +55,10 @@ fun MainScreen(
                     onValueChange = {
                         searchQuery = it
                     },
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+                    placeholder = {
+                        Text(stringResource(R.string.search_city))
+                    }
                 )
                 LazyColumn {
                     itemsIndexed(
@@ -76,17 +82,9 @@ fun MainScreen(
                 Spacer(modifier = Modifier.weight(1f))
             }
         )
-        Button(
-            onClick = {
-                mainScreenViewModel.updateWeather()
-            },
-            shape = RoundedCornerShape(10.dp),
-            modifier = Modifier
-                .fillMaxWidth(0.5f)
-                .align(Alignment.CenterHorizontally),
-            enabled = !isLoading
-        ) {
-            Text(stringResource(R.string.update_btn))
-        }
+        UpdateButtonWithIndicators(
+            isError,
+            isLoading
+        ) { mainScreenViewModel.updateWeather() }
     }
 }

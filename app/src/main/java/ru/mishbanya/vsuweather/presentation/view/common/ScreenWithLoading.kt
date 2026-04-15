@@ -12,22 +12,21 @@ import androidx.compose.ui.res.stringResource
 import ru.mishbanya.vsuweather.R
 
 @Composable
-fun ColumnScope.LoadingWIthErrorsScreen(
-    isError: Boolean,
+fun ColumnScope.ScreenWithLoading(
     isLoading: Boolean,
     content: (@Composable () -> Unit)?
 ) {
-    when {
-        isLoading -> {
+    content?.let {
+        it()
+    } ?: run {
+        if(isLoading){
             Spacer(modifier = Modifier.weight(1f))
             CircularProgressIndicator(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
             )
             Spacer(modifier = Modifier.weight(1f))
-        }
-
-        isError -> {
+        }else{
             Spacer(modifier = Modifier.weight(1f))
             Text(
                 stringResource(R.string.is_error),
@@ -36,21 +35,6 @@ fun ColumnScope.LoadingWIthErrorsScreen(
                     .align(Alignment.CenterHorizontally)
             )
             Spacer(modifier = Modifier.weight(1f))
-        }
-
-        else -> {
-            content?.let {
-                it()
-            } ?: run {
-                Spacer(modifier = Modifier.weight(1f))
-                Text(
-                    stringResource(R.string.is_error),
-                    color = Color.Red,
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                )
-                Spacer(modifier = Modifier.weight(1f))
-            }
         }
     }
 }

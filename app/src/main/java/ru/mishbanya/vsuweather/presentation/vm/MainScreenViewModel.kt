@@ -37,8 +37,8 @@ class MainScreenViewModel(
         initialValue = listOf()
     )
 
-    val isLoading = retrofitWeatherRepository.isLoading
-    val isError = retrofitWeatherRepository.isError
+    val isLoadingFromServer = retrofitWeatherRepository.isLoading
+    val isServerError = retrofitWeatherRepository.isError
 
     fun startCity(cityForecastModel: CityForecastModel) {
         viewModelScope.launch {

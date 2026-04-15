@@ -41,8 +41,8 @@ class CityScreenViewModel(
         initialValue = null
     )
 
-    val isLoading = retrofitWeatherRepository.isLoading
-    val isError = retrofitWeatherRepository.isError
+    val isLoadingFromServer = retrofitWeatherRepository.isLoading
+    val isServerError = retrofitWeatherRepository.isError
 
     fun setCity(id: String) {
         cityWeatherID.value = id
