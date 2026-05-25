@@ -34,7 +34,7 @@ internal fun MainScreenСityCard(
     onClick: () -> Unit,
     onStar: () -> Unit
 ){
-    val weatherToday = cityWeather.forecastModel[LocalDate.now()] ?: cityWeather.forecastModel.values.firstOrNull() ?: return
+    val weatherToday = cityWeather.forecastModel.firstOrNull{it.date == LocalDate.now()} ?: cityWeather.forecastModel.firstOrNull() ?: return
 
     Card(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),

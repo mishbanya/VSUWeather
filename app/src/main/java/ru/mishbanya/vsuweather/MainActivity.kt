@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentActivity
 import ru.mishbanya.vsuweather.presentation.view.screens.city.CityScreenFragment
 import ru.mishbanya.vsuweather.presentation.view.screens.main.MainScreenFragment
 import ru.mishbanya.vsuweather.presentation.nav.ScreenConfig
+import ru.mishbanya.vsuweather.presentation.view.screens.date.DateScreenFragment
 
 class MainActivity : FragmentActivity() {
     private var screenConfig: ScreenConfig = ScreenConfig.MainScreenConfig
@@ -30,6 +31,12 @@ class MainActivity : FragmentActivity() {
             is ScreenConfig.CityScreenConfig -> {
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, CityScreenFragment.newInstance(screenConfig.cityID))
+                    .addToBackStack(null)
+                    .commit()
+            }
+            is ScreenConfig.DateScreenConfig -> {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, DateScreenFragment.newInstance(screenConfig.cityID, screenConfig.date))
                     .addToBackStack(null)
                     .commit()
             }

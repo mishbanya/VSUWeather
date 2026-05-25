@@ -10,12 +10,13 @@ import java.util.UUID
 data class CityForecastModel(
     val id: String = UUID.randomUUID().toString(),
     val name: String,
-    val forecastModel: Map<@Serializable(with = LocalDateSerializer::class) LocalDate, ForecastModel>,
+    val forecastModel: List<ForecastModel>,
     val starred: Boolean = false
 )
 
 @Serializable
 data class ForecastModel(
+    @Serializable(with = LocalDateSerializer::class) val date: LocalDate,
     val temperature: Int,
     val description: String,
     val icon: WeatherIcon

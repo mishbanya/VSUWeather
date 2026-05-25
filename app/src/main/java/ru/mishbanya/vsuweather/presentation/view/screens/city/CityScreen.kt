@@ -28,6 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.mishbanya.vsuweather.R
+import ru.mishbanya.vsuweather.presentation.nav.ScreenConfig
 import ru.mishbanya.vsuweather.presentation.view.common.ScreenWithLoading
 import ru.mishbanya.vsuweather.presentation.view.common.UpdateButtonWithIndicators
 import ru.mishbanya.vsuweather.presentation.view.screens.city.util.CityScreenSort
@@ -38,7 +39,8 @@ import ru.mishbanya.vsuweather.presentation.vm.CityScreenViewModel
 fun CityScreen(
     modifier: Modifier = Modifier,
     cityScreenViewModel: CityScreenViewModel,
-    navigateUp: () -> Unit = {}
+    navigateUp: () -> Unit,
+    navigateTo: (ScreenConfig) -> Unit
 ) {
     val cityWeather by cityScreenViewModel.cityForecastModel.collectAsState()
 
@@ -54,10 +56,10 @@ fun CityScreen(
     ) {
         ScreenWithLoading(
             isLoading = isLoading,
-            content = cityWeather?.let{
+            content = cityWeather?.let{ city ->
                 {
                     Text(
-                        text = it.name,
+                        text = city.name,
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center,
@@ -85,19 +87,19 @@ fun CityScreen(
                     }
                     LazyColumn {
                         itemsIndexed(
-                            items = it.forecastModel
-                                .map {
-                                    Pair(it.key, it.value)
-                                }
+                            items = city.forecastModel
                                 .let { list ->
                                     when(sortedBy){
-                                        CityScreenSort.DATE -> list.sortedBy { pair -> pair.first }
-                                        CityScreenSort.TEMPERATURE -> list.sortedBy { pair -> pair.second.temperature }
+                                        CityScreenSort.DATE -> list.sortedBy { it.date }
+                                        CityScreenSort.TEMPERATURE -> list.sortedBy { it.temperature }
                                     }
                                 }
-                        ) { _, dateWeather ->
+                        ) { _, weather ->
                             CityScreenDateCard(
-                                dateWeather = dateWeather
+                                weather = weather,
+                                onClick = {
+                                    navigateTo(ScreenConfig.DateScreenConfig(city.id ,weather.date.toString()))
+                                }
                             )
                         }
                     }

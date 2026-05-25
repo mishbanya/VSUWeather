@@ -26,16 +26,16 @@ import java.time.LocalDate
 
 @Composable
 fun CityScreenDateCard(
-    dateWeather: Pair<LocalDate, ForecastModel>
+    weather: ForecastModel,
+    onClick: () -> Unit
 ) {
-    val date = dateWeather.first
-    val weather = dateWeather.second
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp),
         shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        onClick = onClick
     ) {
         Row(
             modifier = Modifier
@@ -51,7 +51,7 @@ fun CityScreenDateCard(
             Spacer(modifier = Modifier.width(16.dp))
             Column() {
                 Text(
-                    text = date.toString(),
+                    text = weather.date.toString(),
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Companion.Bold
                 )

@@ -10,8 +10,8 @@ fun RetrofitCityModel.toCityForecastModel(isStarred: Boolean): CityForecastModel
     return CityForecastModel(
         id = id,
         name = name,
-        forecastModel = forecasts.associate {
-            it.date to it.toForecastModel()
+        forecastModel = forecasts.map {
+            it.toForecastModel()
         },
         starred = isStarred
     )
@@ -21,8 +21,8 @@ fun WeatherEntity.toCityForeCastModel(isStarred: Boolean): CityForecastModel {
     return CityForecastModel(
         id = id,
         name = name,
-        forecastModel = forecasts.associate {
-            it.date to it.toForecastModel()
+        forecastModel = forecasts.map {
+            it.toForecastModel()
         },
         starred = isStarred
     )
@@ -30,6 +30,7 @@ fun WeatherEntity.toCityForeCastModel(isStarred: Boolean): CityForecastModel {
 
 fun RetrofitForecastModel.toForecastModel(): ForecastModel {
     return ForecastModel(
+        date = date,
         temperature = temperature,
         description = description,
         icon = icon

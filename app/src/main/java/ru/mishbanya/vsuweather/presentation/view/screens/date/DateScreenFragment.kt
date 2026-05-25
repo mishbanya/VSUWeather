@@ -1,4 +1,4 @@
-package ru.mishbanya.vsuweather.presentation.view.screens.city
+package ru.mishbanya.vsuweather.presentation.view.screens.date
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,20 +13,23 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.mishbanya.vsuweather.MainActivity
-import ru.mishbanya.vsuweather.presentation.vm.CityScreenViewModel
 import ru.mishbanya.vsuweather.presentation.nav.ScreenConfig
 import ru.mishbanya.vsuweather.presentation.view.theme.VSUWeatherTheme
+import ru.mishbanya.vsuweather.presentation.vm.DateScreenViewModel
+import kotlin.getValue
 
-class CityScreenFragment : Fragment() {
-    private val cityScreenViewModel: CityScreenViewModel by viewModel()
+class DateScreenFragment: Fragment() {
+    private val dateScreenViewModel: DateScreenViewModel by viewModel()
 
     companion object {
         const val CITY_WEATHER_KEY = "city_weather"
+        const val DATE_WEATHER_KEY = "date_weather"
 
-        fun newInstance(cityId: String): CityScreenFragment {
-            val fragment = CityScreenFragment()
+        fun newInstance(cityId: String, date: String): DateScreenFragment {
+            val fragment = DateScreenFragment()
             val args = Bundle()
             args.putString(CITY_WEATHER_KEY, cityId)
+            args.putString(DATE_WEATHER_KEY, date)
             fragment.arguments = args
             return fragment
         }
@@ -37,21 +40,28 @@ class CityScreenFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        arguments?.getString(CITY_WEATHER_KEY)?.let { cityScreenViewModel.setCity(it) }
+        val cityId = arguments?.getString(CITY_WEATHER_KEY)
+        cityId?.let {
+            dateScreenViewModel.setCity(it)
+        }
+        arguments?.getString(DATE_WEATHER_KEY)?.let {
+            dateScreenViewModel.setDate(it)
+        }
 
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 VSUWeatherTheme {
                     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                        CityScreen(
+                        DateScreen(
                             modifier = Modifier.padding(innerPadding),
-                            cityScreenViewModel = cityScreenViewModel,
+                            dateScreenViewModel = dateScreenViewModel,
                             navigateUp = {
-                                (activity as? MainActivity)?.navigateTo(ScreenConfig.MainScreenConfig)
-                            },
-                            navigateTo = {
-                                (activity as? MainActivity)?.navigateTo(it)
+                                (activity as? MainActivity)?.navigateTo(
+                                    cityId?.let {
+                                        ScreenConfig.CityScreenConfig(it)
+                                    } ?: ScreenConfig.MainScreenConfig
+                                )
                             }
                         )
                     }

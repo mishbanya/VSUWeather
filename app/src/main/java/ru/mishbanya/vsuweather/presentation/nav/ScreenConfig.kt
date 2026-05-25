@@ -9,6 +9,8 @@ sealed class ScreenConfig {
     object MainScreenConfig: ScreenConfig()
     @Serializable
     class CityScreenConfig(val cityID: String): ScreenConfig()
+    @Serializable
+    class DateScreenConfig(val cityID: String, val date: String): ScreenConfig()
 
     companion object{
         const val KEY = "screen_config"
