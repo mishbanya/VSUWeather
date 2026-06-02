@@ -14,7 +14,8 @@ import ru.mishbanya.vsuweather.data.database.AppDatabase
 @Module
 class CommonModule {
     private val SP_KEY = "vsu_weather_key"
-    private val BASE_URL = "https://api-labs.wiremockapi.cloud/"
+    //private val BASE_URL = "https://api-labs.wiremockapi.cloud/"
+    private val BASE_URL = "https://weather-forecast-vsu.free.beeceptor.com/"
 
     @Single
     fun provideRetrofitClient(): Retrofit {
