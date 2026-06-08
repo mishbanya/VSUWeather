@@ -79,6 +79,8 @@ dependencies {
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
 
+    implementation("androidx.glance:glance-appwidget:1.1.1")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -7,6 +7,7 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
+import androidx.glance.appwidget.updateAll
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -14,6 +15,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.random.Random
+import ru.mishbanya.vsuweather.widget.WeatherWidget
 
 class MockNotificationService : Service() {
 
@@ -28,6 +30,7 @@ class MockNotificationService : Service() {
         loopJob = serviceScope.launch {
             WeatherEventBus.weatherUpdated.collect {
                 postMockNotification()
+                WeatherWidget().updateAll(this@MockNotificationService)
             }
         }
     }
