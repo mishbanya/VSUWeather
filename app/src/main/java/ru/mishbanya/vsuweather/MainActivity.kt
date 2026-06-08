@@ -32,18 +32,16 @@ class MainActivity : FragmentActivity() {
             (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED)
         ) {
             registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-                if (granted) startNotificationService()
-            }
+                if (granted) {
+                    val intent = Intent(this, MockNotificationService::class.java)
+                    startForegroundService(intent)
+                }
+            }.launch(Manifest.permission.POST_NOTIFICATIONS)
         } else {
-            startNotificationService()
+            val intent = Intent(this, MockNotificationService::class.java)
+            startForegroundService(intent)
         }
     }
-
-    private fun startNotificationService() {
-        val intent = Intent(this, MockNotificationService::class.java)
-        startForegroundService(intent)
-    }
-
 
     fun navigateTo(screenConfig: ScreenConfig){
         this.screenConfig = screenConfig

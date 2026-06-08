@@ -1,5 +1,6 @@
 package ru.mishbanya.vsuweather.data.retrofit.weather
 
+import android.content.Context
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -15,11 +16,13 @@ import ru.mishbanya.vsuweather.data.database.weather.LocalWeatherRepository
 import ru.mishbanya.vsuweather.data.retrofit.weather.api.WeatherApi
 import ru.mishbanya.vsuweather.data.retrofit.weather.dto.RetrofitCityModel
 import ru.mishbanya.vsuweather.data.retrofit.weather.dto.mappers.toWeatherEntity
+import ru.mishbanya.vsuweather.notifications.WeatherEventBus
 
 @Single(binds = [RetrofitWeatherRepository::class])
 class RetrofitWeatherRepositoryImpl(
     private val retrofit: Retrofit,
-    private val localWeatherRepository: LocalWeatherRepository
+    private val localWeatherRepository: LocalWeatherRepository,
+    private val context: Context
 ): RetrofitWeatherRepository {
     private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
@@ -53,6 +56,7 @@ class RetrofitWeatherRepositoryImpl(
             localWeatherRepository.saveWeather(response.cities.map { it.toWeatherEntity() })
             _cities.emit(response.cities)
             _isError.emit(false)
+            WeatherEventBus.emitWeatherUpdated()
         } catch (e: Exception) {
             _cities.emit(listOf())
             _isError.emit(true)

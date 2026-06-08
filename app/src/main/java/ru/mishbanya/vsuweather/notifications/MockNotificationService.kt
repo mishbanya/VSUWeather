@@ -24,7 +24,12 @@ class MockNotificationService : Service() {
         super.onCreate()
         createChannels()
         startForeground(FOREGROUND_NOTIFICATION_ID, buildForegroundNotification())
-        startNotificationLoop()
+
+        loopJob = serviceScope.launch {
+            WeatherEventBus.weatherUpdated.collect {
+                postMockNotification()
+            }
+        }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int = START_STICKY
@@ -37,21 +42,12 @@ class MockNotificationService : Service() {
 
     override fun onBind(intent: Intent?): IBinder? = null
 
-    private fun startNotificationLoop() {
-        loopJob = serviceScope.launch {
-            while (true) {
-                delay(INTERVAL_MS)
-                postMockNotification()
-            }
-        }
-    }
-
     private fun postMockNotification() {
         val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         val notification = NotificationCompat.Builder(this, MOCK_CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setContentTitle("Mock Push")
-            .setContentText("Тестовое уведомление #${Random.nextInt(1000)}")
+            .setContentText("Погода была успешно обновлена")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
             .build()
